@@ -1,4 +1,3 @@
-from pickle import FALSE
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.db import models
@@ -23,3 +22,9 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+class DummyUser(models.Model):
+    email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=16)
+    last_name = models.CharField(max_length=16)
+    is_logged_in = models.BooleanField(default=False)
