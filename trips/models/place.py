@@ -16,4 +16,4 @@ class Place(models.Model):
     time = models.TimeField(null = True)
     note = models.TextField(blank = True)
     category = models.CharField(max_length = 4, choices = CATEGORIES)
-    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name = 'places')
