@@ -1,7 +1,10 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from urllib3 import HTTPResponse
 from profiles.models import DummyUser
-from trips.serializers import UserMinSerializer
+from trips.serializers import UserTripSerializer, UserMinSerializer, TripSerializer
 from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 class UserList(generics.ListCreateAPIView):
     '''
@@ -29,9 +32,33 @@ class MultipleFieldLookupMixin:
         return obj
 
 
-class UserDetail(MultipleFieldLookupMixin, generics.RetrieveAPIView):
+class UserDetail(MultipleFieldLookupMixin, generics.RetrieveUpdateAPIView):
     '''
     '''
     queryset = DummyUser.objects.all()
     serializer_class = UserMinSerializer
     lookup_fields = ['pk', 'email']
+
+    def put(self, request, *args, **kwargs):
+        pass
+
+class UserTrips(APIView):
+    '''
+    Get all of a specific user's trips. 
+    Make a new trip associated w/ a user. 
+    '''
+
+    def get(self, request, *args, **kwargs):
+        user = get_object_or_404(DummyUser, pk=kwargs['pk'])
+        serializer = UserTripSerializer(user)
+
+        return Response(serializer.data)
+    
+    def post(self,request, *args, **kwargs):
+        user = get_object_or_404(DummyUser, pk=kwargs['pk'])
+        trip = TripSerializer(data=request.data)
+        if trip.is_valid(raise_exception=True):
+            trip.save()
+            user.trips.add(trip.data["id"])
+        return Response(UserTripSerializer(user).data, status=status.HTTP_201_CREATED)
+
