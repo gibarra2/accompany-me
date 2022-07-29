@@ -1,10 +1,10 @@
 from rest_framework import generics, status
-from urllib3 import HTTPResponse
 from profiles.models import DummyUser
-from trips.serializers import UserTripSerializer, UserMinSerializer, TripSerializer
+from trips.serializers import UserTripSerializer, UserSerializer, TripSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 class UserList(generics.ListCreateAPIView):
     '''
@@ -12,35 +12,30 @@ class UserList(generics.ListCreateAPIView):
     Create a new user. 
     '''
     queryset = DummyUser.objects.all()
-    serializer_class = UserMinSerializer
+    serializer_class = UserSerializer
 
-
-class MultipleFieldLookupMixin:
-    """
-    Apply this mixin to any view or viewset to get multiple field filtering
-    based on a `lookup_fields` attribute, instead of the default single field filtering.
-    """
-    def get_object(self):
-        queryset = self.get_queryset()             
-        queryset = self.filter_queryset(queryset)  
+class UserDetail(APIView):
+    '''
+    Get individual user information via ID or email. 
+    Update 
+    '''
+    def get(self, request, *args, **kwargs):
+        queryset = DummyUser.objects.all() 
         filter = {}
-        for field in self.lookup_fields:
-            if self.kwargs.get(field, None):  
-                filter[field] = self.kwargs[field]
-        obj = get_object_or_404(queryset, **filter)  # Lookup the object
-        self.check_object_permissions(self.request, obj)
-        return obj
+        for field in kwargs:
+            filter[field] = kwargs[field]
+        user = get_object_or_404(queryset, **filter)
+        serializer = UserSerializer(user)
 
+        return Response(serializer.data)
 
-class UserDetail(MultipleFieldLookupMixin, generics.RetrieveUpdateAPIView):
-    '''
-    '''
-    queryset = DummyUser.objects.all()
-    serializer_class = UserMinSerializer
-    lookup_fields = ['pk', 'email']
+    def patch(self,request, pk):
+        user = get_object_or_404(DummyUser, pk = pk)
+        serializer = UserSerializer(user, data=request.data, partial = True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-    def put(self, request, *args, **kwargs):
-        pass
+        return Response(serializer.data)
 
 class UserTrips(APIView):
     '''
@@ -61,4 +56,13 @@ class UserTrips(APIView):
             trip.save()
             user.trips.add(trip.data["id"])
         return Response(UserTripSerializer(user).data, status=status.HTTP_201_CREATED)
+
+@api_view(['DELETE'])
+def delete_user_trip(request, *args, **kwargs):
+    print(request)
+    print(kwargs["trip_id"])
+
+    trip_id = kwargs["trip_id"]
+
+    return Response(f"Trip {trip_id} successfully deleted")
 

@@ -13,25 +13,28 @@ class TripSerializer(serializers.ModelSerializer):
             'country', 
             'start_date', 
             'end_date', 
-            'is_proposal',
+            'is_proposal'
             ]
 
-        # def create(self, validated_data):
-        #     trips_data = validated_data.pop('trips')
-        #     user = DummyUser.create(**validated_data)
-        #     for trip_data in trips_data:
-        #         Trip.objects.create(user=user, **trip_data)
-        #     return user
-class UserMinSerializer(serializers.ModelSerializer):
+
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = DummyUser
         fields = [
             'id', 
             'first_name', 
             'last_name', 
-            'email', 
+            'email',
             'is_logged_in'
         ]
+
+        extra_kwargs = {'email': {'write_only': True}}
+
+    def update(self, instance, validated_data):
+        login_status = validated_data.get('is_logged_in', instance.is_logged_in)
+        instance.is_logged_in = login_status
+        return instance
+
 
 class UserTripSerializer(serializers.ModelSerializer):
     trips = TripSerializer(many=True)
@@ -42,25 +45,3 @@ class UserTripSerializer(serializers.ModelSerializer):
             'trips',
             ]
         read_only_fields = ['id']
-
-    # def create(self, instance,  validated_data):
-    #     trips_data = validated_data.pop('trips')
-    #     print(validated_data)
-    #     user = instance
-    #     for trip_data in trips_data:
-    #         Trip.objects.update(user=user, **trip_data)
-    #     return user
-    
-    # def update(self, instance, validated_data):
-    #     trips_data = validated_data.pop('trips')
-    #     print(validated_data)
-    #     user = instance
-    #     for trip_data in trips_data:
-    #         Trip.objects.update(users=user, **trip_data)
-    #     return user
-
-# class PlaceSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Place
-#         fields = []
-
