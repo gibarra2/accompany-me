@@ -54,7 +54,7 @@ class UserTrips(APIView):
         trip = TripSerializer(data=request.data)
         if trip.is_valid(raise_exception=True):
             trip.save()
-            user.trips.add(trip.data["id"])
+            user.trips.add(trip.data['id'])
         return Response(UserTripSerializer(user).data, status=status.HTTP_201_CREATED)
 
 @api_view(['DELETE'])

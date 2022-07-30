@@ -1,10 +1,10 @@
-from wsgiref import validate
 from rest_framework import serializers
-from .models import Trip, Place
-# from django.conf import settings
+from .models import Trip
 from profiles.models import DummyUser
+from datetime import date
 
 class TripSerializer(serializers.ModelSerializer):
+    # trip_id = serializers.IntegerField(source='id')
     class Meta:
         model = Trip
         fields = [
@@ -13,9 +13,26 @@ class TripSerializer(serializers.ModelSerializer):
             'country', 
             'start_date', 
             'end_date', 
-            'is_proposal'
+            'is_proposal', 
+            'users'
             ]
+        read_only_fields=['id']
 
+    def validate(self, data):
+        if data['start_date'] > data['end_date']:
+            raise serializers.ValidationError("End date must be after start date.")
+        elif data['start_date'] < date.today():
+            raise serializers.ValidationError("Start date must be after today's date.")
+        return data
+
+class TripUserSerializer(serializers.ModelSerializer):
+    trip_id = serializers.IntegerField(source='id')
+    class Meta:
+        model = Trip
+        fields = [
+            'trip_id', 
+            'users'
+        ]
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,8 +45,6 @@ class UserSerializer(serializers.ModelSerializer):
             'is_logged_in'
         ]
 
-        extra_kwargs = {'email': {'write_only': True}}
-
     def update(self, instance, validated_data):
         login_status = validated_data.get('is_logged_in', instance.is_logged_in)
         instance.is_logged_in = login_status
@@ -37,11 +52,17 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserTripSerializer(serializers.ModelSerializer):
-    trips = TripSerializer(many=True)
+    user_id = serializers.IntegerField(source='id')
+    trips = serializers.SerializerMethodField()
     class Meta:
         model = DummyUser
         fields = [
-            'id',
+            'user_id',
             'trips',
             ]
-        read_only_fields = ['id']
+        read_only_fields = ['user_id']
+    
+    def get_trips(self, instance):
+        trips = instance.trips.all().order_by('start_date')
+        return TripSerializer(trips, many=True).data
+    
