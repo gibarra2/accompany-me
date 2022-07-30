@@ -17,7 +17,7 @@ class UserList(generics.ListCreateAPIView):
 class UserDetail(APIView):
     '''
     Get individual user information via ID or email. 
-    Update 
+    Update a user's login status. 
     '''
     def get(self, request, *args, **kwargs):
         queryset = DummyUser.objects.all() 
@@ -56,13 +56,4 @@ class UserTrips(APIView):
             trip.save()
             user.trips.add(trip.data['id'])
         return Response(UserTripSerializer(user).data, status=status.HTTP_201_CREATED)
-
-@api_view(['DELETE'])
-def delete_user_trip(request, *args, **kwargs):
-    print(request)
-    print(kwargs["trip_id"])
-
-    trip_id = kwargs["trip_id"]
-
-    return Response(f"Trip {trip_id} successfully deleted")
 

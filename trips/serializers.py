@@ -4,7 +4,6 @@ from profiles.models import DummyUser
 from datetime import date
 
 class TripSerializer(serializers.ModelSerializer):
-    # trip_id = serializers.IntegerField(source='id')
     class Meta:
         model = Trip
         fields = [
