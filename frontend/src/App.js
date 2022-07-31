@@ -4,6 +4,7 @@ import Home from './Pages/Home';
 import Trip from './Pages/Trip';
 import TripProposal from './Pages/TripProposal';
 import Header from './Components/Header';
+import Button from '@mui/material/Button';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         <div className="main-container">
           <Header />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/user/:id" element={<Home />} />
             <Route path="/trip/:id" element={<Trip />} />
             <Route path="/proposal/:id" element={<TripProposal />} />
           </Routes>
