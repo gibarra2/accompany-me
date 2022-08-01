@@ -11,7 +11,7 @@ import TripCard from './Components/TripCard';
 function App() {
   const [tripList, setTripList] = useState([]);
 
-  const url = 'http://localhost:8000';
+  const url = process.env.REACT_APP_DEV_SERVER_URL;
 
   const getTrips = (userID) => {
     axios
