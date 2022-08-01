@@ -17,7 +17,6 @@ function App() {
     axios
       .get(`${url}/users/${userID}/trips/`)
       .then((response) => {
-        console.log(response);
         setTripList(response.data.trips);
       })
       .catch((error) => {

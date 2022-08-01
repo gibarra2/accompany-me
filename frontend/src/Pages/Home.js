@@ -7,8 +7,6 @@ import TripForm from '../Components/TripForm';
 const Home = ({ getTrips, tripList }) => {
   let { userID } = useParams();
 
-  console.log(userID);
-
   useEffect(() => {
     getTrips(userID);
   }, []);

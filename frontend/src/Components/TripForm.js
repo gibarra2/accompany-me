@@ -2,7 +2,7 @@ import React from 'react';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useState, useEffect } from 'react';
@@ -12,7 +12,6 @@ import Chip from '@mui/material/Chip';
 
 const TripForm = () => {
   const [users, setUsers] = useState([]);
-  const [date, setDate] = useState(new Date());
   const [formFields, setFormFields] = useState({
     city: '',
     country: '',
@@ -34,13 +33,16 @@ const TripForm = () => {
     });
   };
 
+  const submitTripData = (event) => {
+    event.preventDefault();
+  };
+
   const url = process.env.REACT_APP_DEV_SERVER_URL;
 
   const getUsers = () => {
     axios
       .get(`${url}/users/`)
       .then((response) => {
-        console.log(response.data);
         let allUsers = response.data.map((user) => {
           return {
             label: `${user.first_name} ${user.last_name}`,
@@ -88,12 +90,12 @@ const TripForm = () => {
           // setFormFields({ ...formFields, users: [...formFields.users] })
         }
       />
-      <LocalizationProvider dateAdapter={AdapterLuxon}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           label="Start Date"
           value={formFields['start_date']}
           onChange={(newValue) => {
-            setDate(newValue);
+            setFormFields({ ...formFields, start_date: newValue });
           }}
           renderInput={(params) => <TextField {...params} />}
         />
@@ -101,12 +103,12 @@ const TripForm = () => {
           label="End Date"
           value={formFields['end_date']}
           onChange={(newValue) => {
-            setDate(newValue);
+            setFormFields({ ...formFields, end_date: newValue });
           }}
           renderInput={(params) => <TextField {...params} />}
         />
       </LocalizationProvider>
-      <Button variant="contained" type="submit">
+      <Button variant="contained" type="submit" onSubmit={submitTripData}>
         Submit
       </Button>
       {/* </form> */}
