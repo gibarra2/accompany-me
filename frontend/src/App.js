@@ -9,15 +9,16 @@ import axios from 'axios';
 import TripCard from './Components/TripCard';
 
 function App() {
-  const [tripList, setTripList] = useState({});
+  const [tripList, setTripList] = useState([]);
 
-  const url = 'http://localhost:3000';
+  const url = 'http://localhost:8000';
 
   const getTrips = (userID) => {
     axios
-      .get(`${url}/users/${userID}/trips`)
+      .get(`${url}/users/${userID}/trips/`)
       .then((response) => {
         console.log(response);
+        setTripList(response.data.trips);
       })
       .catch((error) => {
         console.log(error);
@@ -31,7 +32,10 @@ function App() {
         <div className="main-container">
           <Header />
           <Routes>
-            <Route path="/user/:id" element={<Home getTrips={getTrips} />} />
+            <Route
+              path="/user/:userID"
+              element={<Home getTrips={getTrips} tripList={tripList} />}
+            />
             <Route path="/trip/:id" element={<Trip />} />
             <Route path="/proposal/:id" element={<TripProposal />} />
           </Routes>
