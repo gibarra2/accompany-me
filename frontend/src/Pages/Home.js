@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import TripList from '../Components/TripList';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import Link from '@mui/icons-material/Link';
 
-const Home = () => {
+const Home = ({ getTrips }) => {
   let { id } = useParams();
   return (
     <>
-      <p>This is the home page. down? </p>
+      <h2>Upcoming Trips</h2>
+      {/* Trip List gets rendered here */}
+      <TripList />
     </>
   );
 };
