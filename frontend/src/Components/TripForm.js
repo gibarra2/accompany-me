@@ -11,12 +11,16 @@ import Chip from '@mui/material/Chip';
 import '../styles/TripForm.css';
 
 const TripForm = ({ userID, submitTrip }) => {
+  let today = new Date();
+  let tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
   const defaultState = {
     city: '',
     country: '',
     users: [],
-    start_date: new Date(),
-    end_date: new Date(),
+    start_date: today,
+    end_date: tomorrow,
   };
 
   const [users, setUsers] = useState([]);
