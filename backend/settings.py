@@ -136,4 +136,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'profiles.user'
 
+REST_FRAMEWORK = {
+    'DATE_FORMAT': '%m/%d/%Y', 
+    'DATE_INPUT_FORMATS': ['%m/%d/%Y', '%m-%d-%Y'], 
+    'DATETIME_FORMAT': '%m/%d/%Y %H:%M',
+    'DATETIME_INPUT_FORMATS': ['%m/%d/%Y %H:%M:%S', '%m/%d/%Y %H:%M']
+}
+
 CORS_ORIGIN_ALLOW_ALL = True

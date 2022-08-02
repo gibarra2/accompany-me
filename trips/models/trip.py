@@ -8,4 +8,4 @@ class Trip(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     is_proposal = models.BooleanField(default=False)
-    users = models.ManyToManyField(DummyUser, related_name="trips")
+    users = models.ManyToManyField(DummyUser, blank=True, related_name="trips")
