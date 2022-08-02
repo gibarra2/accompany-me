@@ -1,10 +1,8 @@
 import React from 'react';
-import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { DatePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
@@ -39,13 +37,15 @@ const TripForm = ({ userID, submitTrip }) => {
 
   const submitTripData = (event) => {
     event.preventDefault();
-    let formattedStartDate = format(formFields['start_date'], 'yyyy-MM-dd');
-    let formattedEndDate = format(formFields['end_date'], 'yyyy-MM-dd');
+    let formattedStartDate = format(formFields['start_date'], 'MM-dd-yyyy');
+    let formattedEndDate = format(formFields['end_date'], 'MM-dd-yyyy');
+    const userIDArray = getIDs(formFields.users);
 
     const requestBody = {
       ...formFields,
       start_date: formattedStartDate,
       end_date: formattedEndDate,
+      users: userIDArray,
     };
 
     console.log(requestBody);
@@ -62,13 +62,17 @@ const TripForm = ({ userID, submitTrip }) => {
     axios
       .get(`${url}/users/`)
       .then((response) => {
-        let allUsers = response.data.map((user) => {
-          return {
-            label: `${user.first_name} ${user.last_name}`,
-            id: user.id,
-            value: user.id,
-          };
-        });
+        let allUsers = response.data
+          .filter((user) => {
+            return user.id !== parseInt(userID);
+          })
+          .map((user) => {
+            return {
+              label: `${user.first_name} ${user.last_name}`,
+              id: user.id,
+              value: `${user.first_name} ${user.last_name}`,
+            };
+          });
         setUsers(allUsers);
       })
       .catch((error) => {
@@ -101,8 +105,9 @@ const TripForm = ({ userID, submitTrip }) => {
         id="users"
         options={users}
         renderInput={(params) => <TextField {...params} label="Users" />}
+        value={formFields.users}
         onChange={(event, value) => {
-          setFormFields({ ...formFields, users: getIDs(value) });
+          setFormFields({ ...formFields, users: value });
         }}
       />
       <LocalizationProvider dateAdapter={AdapterDateFns}>
