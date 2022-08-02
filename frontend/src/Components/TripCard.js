@@ -1,14 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
-const TripCard = ({ location, dates }) => {
+const TripCard = ({ location, dates, tripID }) => {
+  const navigate = useNavigate();
   return (
     <>
-      <Card sx={{ maxWidth: 400 }}>
+      <Card sx={{ maxWidth: 400 }} onClick={() => navigate(`trip/${tripID}`)}>
         <CardActionArea>
           <CardMedia
             component="img"

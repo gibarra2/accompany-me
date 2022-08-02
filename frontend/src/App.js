@@ -52,7 +52,7 @@ function App() {
                 />
               }
             />
-            <Route path="/trip/:id" element={<Trip />} />
+            <Route path="/user/:userID/trip/:tripID" element={<Trip />} />
             <Route path="/proposal/:id" element={<TripProposal />} />
           </Routes>
         </div>

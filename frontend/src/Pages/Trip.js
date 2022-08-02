@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 const Trip = () => {
-  let { id } = useParams();
+  let { tripID } = useParams();
   // Can use id variable to make api requests
   return (
     <>
