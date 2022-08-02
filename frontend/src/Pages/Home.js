@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import TripForm from '../Components/TripForm';
 
-const Home = ({ getTrips, tripList }) => {
+const Home = ({ getTrips, tripList, submitTrip }) => {
   let { userID } = useParams();
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const Home = ({ getTrips, tripList }) => {
         Upcoming Trips
       </Typography>
       <TripList tripList={tripList} />
-      <TripForm />
+      <TripForm userID={userID} submitTrip={submitTrip} />
     </>
   );
 };

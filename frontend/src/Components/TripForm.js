@@ -8,17 +8,21 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
+import format from 'date-fns/format';
 import Chip from '@mui/material/Chip';
+import '../styles/TripForm.css';
 
-const TripForm = () => {
-  const [users, setUsers] = useState([]);
-  const [formFields, setFormFields] = useState({
+const TripForm = ({ userID, submitTrip }) => {
+  const defaultState = {
     city: '',
     country: '',
     users: [],
     start_date: new Date(),
     end_date: new Date(),
-  });
+  };
+
+  const [users, setUsers] = useState([]);
+  const [formFields, setFormFields] = useState(defaultState);
 
   const handleChange = (e) => {
     setFormFields({ ...formFields, [e.target.id]: e.target.value });
@@ -35,11 +39,26 @@ const TripForm = () => {
 
   const submitTripData = (event) => {
     event.preventDefault();
+    let formattedStartDate = format(formFields['start_date'], 'yyyy-MM-dd');
+    let formattedEndDate = format(formFields['end_date'], 'yyyy-MM-dd');
+
+    const requestBody = {
+      ...formFields,
+      start_date: formattedStartDate,
+      end_date: formattedEndDate,
+    };
+
+    console.log(requestBody);
+    submitTrip(userID, requestBody);
+    setFormFields(defaultState);
   };
 
   const url = process.env.REACT_APP_DEV_SERVER_URL;
 
   const getUsers = () => {
+    /*
+      Gets all users for drop down menu. 
+    */
     axios
       .get(`${url}/users/`)
       .then((response) => {
@@ -60,8 +79,7 @@ const TripForm = () => {
   useEffect(getUsers, []);
 
   return (
-    <Stack spacing={3} sx={{ width: 300 }} component="form">
-      {/* <form> */}
+    <form className="newTripForm" onSubmit={submitTripData}>
       <TextField
         id="city"
         label="City"
@@ -83,12 +101,9 @@ const TripForm = () => {
         id="users"
         options={users}
         renderInput={(params) => <TextField {...params} label="Users" />}
-        onChange={
-          (event, value) => {
-            setFormFields({ ...formFields, users: getIDs(value) });
-          }
-          // setFormFields({ ...formFields, users: [...formFields.users] })
-        }
+        onChange={(event, value) => {
+          setFormFields({ ...formFields, users: getIDs(value) });
+        }}
       />
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
@@ -108,11 +123,10 @@ const TripForm = () => {
           renderInput={(params) => <TextField {...params} />}
         />
       </LocalizationProvider>
-      <Button variant="contained" type="submit" onSubmit={submitTripData}>
+      <Button variant="contained" type="submit">
         Submit
       </Button>
-      {/* </form> */}
-    </Stack>
+    </form>
   );
 };
 

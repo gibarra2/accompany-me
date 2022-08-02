@@ -9,7 +9,7 @@ const TripList = ({ tripList }) => {
       let location = `${trip.city}, ${trip.country}`;
       let dates = `${trip.start_date} - ${trip.end_date}`;
       return (
-        <Grid item md={'auto'}>
+        <Grid item xs={4}>
           <TripCard location={location} dates={dates} />
         </Grid>
       );
@@ -17,7 +17,7 @@ const TripList = ({ tripList }) => {
   };
 
   return (
-    <Grid container spacing={3} justifyContent="space-evenly">
+    <Grid container spacing={3} justifyContent="space-between">
       {makeCards(tripList)}
     </Grid>
   );

@@ -24,6 +24,17 @@ function App() {
       });
   };
 
+  const submitTrip = (userID, tripData) => {
+    axios
+      .post(`${url}/users/${userID}/trips/`, tripData)
+      .then((response) => {
+        setTripList(response.data.trips);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  };
+
   return (
     <Router>
       {/* Components added within Router component will be display on every page */}
@@ -33,7 +44,13 @@ function App() {
           <Routes>
             <Route
               path="/user/:userID"
-              element={<Home getTrips={getTrips} tripList={tripList} />}
+              element={
+                <Home
+                  getTrips={getTrips}
+                  tripList={tripList}
+                  submitTrip={submitTrip}
+                />
+              }
             />
             <Route path="/trip/:id" element={<Trip />} />
             <Route path="/proposal/:id" element={<TripProposal />} />
