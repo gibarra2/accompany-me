@@ -5,19 +5,14 @@ import DialogContent from '@mui/material/DialogContent';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import '../styles/Popup.css';
 
 const Popup = ({ title, children, openPopup, setOpenPopup }) => {
   return (
     <Dialog open={openPopup} maxWidth="md">
       <DialogTitle>
-        <div style={{ display: 'flex' }}>
-          <Typography
-            variant="h6"
-            component="div"
-            style={{ flexGrow: 1, justifyContent: 'center' }}
-          >
-            {title}
-          </Typography>
+        <div className="popup-container">
+          <Typography variant="h6">{title}</Typography>
           <IconButton onClick={() => setOpenPopup(false)}>
             <CloseIcon />
           </IconButton>

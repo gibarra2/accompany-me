@@ -1,0 +1,9 @@
+.popup-container {
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.popup-container h6 {
+    flex-grow: 1;
+}
