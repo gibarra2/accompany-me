@@ -36,14 +36,18 @@ class TripUserSerializer(serializers.ModelSerializer):
 class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
-        fields = '__all__'
+        exclude = ['trip']
 
 class TripPlaceSerializer(TripSerializer):
-    places = PlaceSerializer(many=True)
+    places = serializers.SerializerMethodField()
 
     class Meta(TripSerializer.Meta):
         fields = TripSerializer.Meta.fields + ['places']
-        # depth = 1
+
+    def get_places(self, instance):
+        places = instance.places.all().order_by('date', 'time')
+        return PlaceSerializer(places, many=True).data
+
 
 
 class UserSerializer(serializers.ModelSerializer):
