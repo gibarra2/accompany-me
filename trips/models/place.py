@@ -12,8 +12,8 @@ class Place(models.Model):
     name = models.CharField(max_length=255, unique = True)
     address = models.CharField(max_length=255, unique = True)
     # Required for trips, but not for proposals
-    date = models.DateField(null = True)
-    time = models.TimeField(null = True)
+    date = models.DateField(null = True, blank=True)
+    time = models.TimeField(null = True, blank=True)
     note = models.TextField(blank = True)
     category = models.CharField(max_length = 4, choices = CATEGORIES)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name = 'places')

@@ -1,24 +1,32 @@
 from rest_framework import status
 from .models import Trip
 from profiles.models import DummyUser
-from .serializers import TripSerializer
+from .serializers import TripSerializer, TripPlaceSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 
-@api_view(['DELETE'])
-def delete_trip(request, pk):
-    '''
-    Delete a trip. 
-    '''
-    trip = get_object_or_404(Trip, pk=pk)
-    trip.delete()
-    return Response({"details": f"Trip {pk} successfully deleted "}, status=status.HTTP_204_NO_CONTENT)
+class TripDetail (APIView):
+    def get(self, request, pk, *args, **kwargs):
+        trip = get_object_or_404(Trip, pk=pk)
+        
+        return Response(TripPlaceSerializer(trip).data)
 
+    def delete(self, request, pk, *args, **kwargs):
+        trip = get_object_or_404(Trip, pk=pk)
+        trip.delete()
+        return Response({"details": f"Trip {pk} successfully deleted "}, status=status.HTTP_204_NO_CONTENT)
 
-# Get all users associated w/ a trip /trips/<id>/users
-# Add a user to a trip trips/trip_id/users/user_id
+# @api_view(['DELETE'])
+# def delete_trip(request, pk):
+#     '''
+#     Delete a trip. 
+#     '''
+#     trip = get_object_or_404(Trip, pk=pk)
+#     trip.delete()
+#     return Response({"details": f"Trip {pk} successfully deleted "}, status=status.HTTP_204_NO_CONTENT)
+
 class TripUsers(APIView):
     '''
     Add existing users by ID to an existing trip. 

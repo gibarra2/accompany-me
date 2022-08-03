@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Trip
+from .models import Trip, Place
 from profiles.models import DummyUser
 from datetime import date
 
@@ -32,6 +32,19 @@ class TripUserSerializer(serializers.ModelSerializer):
             'trip_id', 
             'users'
         ]
+
+class PlaceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Place
+        fields = '__all__'
+
+class TripPlaceSerializer(TripSerializer):
+    places = PlaceSerializer(many=True)
+
+    class Meta(TripSerializer.Meta):
+        fields = TripSerializer.Meta.fields + ['places']
+        # depth = 1
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
