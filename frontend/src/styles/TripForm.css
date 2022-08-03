@@ -1,7 +1,0 @@
-.newTripForm {
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    height: 400px;
-    justify-content: space-evenly;
-}

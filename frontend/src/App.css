@@ -1,8 +1,0 @@
-.main-page {
-  display: grid;
-  grid-template-columns: 1fr  80%  1fr;
-}
-
-.main-container {
-  grid-column: 2 / span 1;
-}
