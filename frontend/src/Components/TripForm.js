@@ -10,7 +10,7 @@ import format from 'date-fns/format';
 import Chip from '@mui/material/Chip';
 import '../styles/TripForm.css';
 
-const TripForm = ({ userID, submitTrip }) => {
+const TripForm = ({ userID, submitTrip, setOpenPopup }) => {
   let today = new Date();
   let tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -52,9 +52,9 @@ const TripForm = ({ userID, submitTrip }) => {
       users: userIDArray,
     };
 
-    console.log(requestBody);
     submitTrip(userID, requestBody);
     setFormFields(defaultState);
+    setOpenPopup(false);
   };
 
   const url = process.env.REACT_APP_DEV_SERVER_URL;

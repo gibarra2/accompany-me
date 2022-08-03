@@ -20,7 +20,7 @@ const TripCard = ({ location, dates, tripID }) => {
           />
           <CardContent>
             <Typography variant="h5">{location}</Typography>
-            <Typography variant="h5" color="text.secondary">
+            <Typography variant="h6" color="text.secondary">
               {dates}
             </Typography>
           </CardContent>
