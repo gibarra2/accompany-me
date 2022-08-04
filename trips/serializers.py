@@ -39,7 +39,6 @@ class PlaceSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields=['id']
         extra_kwargs = {'trip': {'write_only': True}}
-    
 
 class TripPlaceSerializer(TripSerializer):
     places = serializers.SerializerMethodField()
@@ -65,6 +64,7 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         login_status = validated_data.get('is_logged_in', instance.is_logged_in)
         instance.is_logged_in = login_status
+        instance.save()
         return instance
 
 

@@ -1,13 +1,16 @@
 from rest_framework import status
-from .models import Trip
+from ..models import Trip
 from profiles.models import DummyUser
-from .serializers import TripSerializer, TripPlaceSerializer, PlaceSerializer
+from ..serializers import TripSerializer, TripPlaceSerializer, PlaceSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 
 class TripDetail (APIView):
+    '''
+    Get information for a single trip, includes places. 
+    '''
     def get(self, request, pk, *args, **kwargs):
         trip = get_object_or_404(Trip, pk=pk)
         return Response(TripPlaceSerializer(trip).data)
