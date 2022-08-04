@@ -36,7 +36,10 @@ class TripUserSerializer(serializers.ModelSerializer):
 class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
-        exclude = ['trip']
+        fields = '__all__'
+        read_only_fields=['id']
+        extra_kwargs = {'trip': {'write_only': True}}
+    
 
 class TripPlaceSerializer(TripSerializer):
     places = serializers.SerializerMethodField()
@@ -47,8 +50,6 @@ class TripPlaceSerializer(TripSerializer):
     def get_places(self, instance):
         places = instance.places.all().order_by('date', 'time')
         return PlaceSerializer(places, many=True).data
-
-
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

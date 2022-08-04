@@ -8,5 +8,6 @@ urlpatterns = [
     path('users/<str:email>/', user_views.UserDetail.as_view()), 
     path('users/<int:pk>/trips/', user_views.UserTrips.as_view()), 
     path('trips/<int:pk>/', trip_views.TripDetail.as_view()),
-    path('trips/<int:pk>/users/', trip_views.TripUsers.as_view())
+    path('trips/<int:pk>/users/', trip_views.TripUsers.as_view()), 
+    path('trips/<int:pk>/places/', trip_views.TripPlaces.as_view())
 ]

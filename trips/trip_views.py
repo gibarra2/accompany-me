@@ -1,7 +1,7 @@
 from rest_framework import status
 from .models import Trip
 from profiles.models import DummyUser
-from .serializers import TripSerializer, TripPlaceSerializer
+from .serializers import TripSerializer, TripPlaceSerializer, PlaceSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -10,22 +10,12 @@ from rest_framework.views import APIView
 class TripDetail (APIView):
     def get(self, request, pk, *args, **kwargs):
         trip = get_object_or_404(Trip, pk=pk)
-        
         return Response(TripPlaceSerializer(trip).data)
 
     def delete(self, request, pk, *args, **kwargs):
         trip = get_object_or_404(Trip, pk=pk)
         trip.delete()
         return Response({"details": f"Trip {pk} successfully deleted "}, status=status.HTTP_204_NO_CONTENT)
-
-# @api_view(['DELETE'])
-# def delete_trip(request, pk):
-#     '''
-#     Delete a trip. 
-#     '''
-#     trip = get_object_or_404(Trip, pk=pk)
-#     trip.delete()
-#     return Response({"details": f"Trip {pk} successfully deleted "}, status=status.HTTP_204_NO_CONTENT)
 
 class TripUsers(APIView):
     '''
@@ -52,3 +42,16 @@ class TripUsers(APIView):
 
         return Response(TripSerializer(trip).data)
 
+class TripPlaces(APIView):
+    '''
+    Add a new place to a trip. 
+    '''
+    def post(self, request, pk):
+        # Retrieve trip you want to modify
+        trip = get_object_or_404(Trip, pk=pk)
+        request.data['trip'] = trip.id
+        place = PlaceSerializer(data = request.data)
+        if place.is_valid(raise_exception=True):
+            place.save()
+
+        return Response(TripPlaceSerializer(trip).data, status=status.HTTP_201_CREATED )

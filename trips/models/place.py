@@ -10,8 +10,7 @@ class Place(models.Model):
         )
 
     name = models.CharField(max_length=255, unique = True)
-    address = models.CharField(max_length=255, unique = True)
-    # Required for trips, but not for proposals
+    address = models.CharField(max_length=255, unique = True) 
     date = models.DateField(null = True, blank=True)
     time = models.TimeField(null = True, blank=True)
     note = models.TextField(blank = True)
