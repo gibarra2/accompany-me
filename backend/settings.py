@@ -140,7 +140,9 @@ REST_FRAMEWORK = {
     'DATE_FORMAT': '%m/%d/%Y', 
     'DATE_INPUT_FORMATS': ['%m/%d/%Y', '%m-%d-%Y'], 
     'DATETIME_FORMAT': '%m/%d/%Y %H:%M',
-    'DATETIME_INPUT_FORMATS': ['%m/%d/%Y %H:%M:%S', '%m/%d/%Y %H:%M']
+    'DATETIME_INPUT_FORMATS': ['%m/%d/%Y %H:%M:%S', '%m/%d/%Y %H:%M'],
+    'TIME_FORMAT': '%H:%M',
+    'TIME_INPUT_FORMAT': ['%H:%M', '%H:%M:%S' ]
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
