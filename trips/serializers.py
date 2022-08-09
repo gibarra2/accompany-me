@@ -12,10 +12,12 @@ class TripSerializer(serializers.ModelSerializer):
             'country', 
             'start_date', 
             'end_date', 
-            'is_proposal', 
+            'is_proposal',
+            'latitude',
+            'longitude',
             'users'
             ]
-        read_only_fields=['id']
+        read_only_fields=['id', 'latitude', 'longitude']
 
     def validate(self, data):
         if data['start_date'] > data['end_date']:
