@@ -39,7 +39,7 @@ class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
         fields = '__all__'
-        read_only_fields=['id']
+        read_only_fields=['id', 'latitude', 'longitude']
         extra_kwargs = {'trip': {'write_only': True}}
 
 class TripPlaceSerializer(TripSerializer):
