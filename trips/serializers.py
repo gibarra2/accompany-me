@@ -47,6 +47,7 @@ class TripPlaceSerializer(TripSerializer):
 
     class Meta(TripSerializer.Meta):
         fields = TripSerializer.Meta.fields + ['places']
+        depth = 1
 
     def get_places(self, instance):
         places = instance.places.all().order_by('date', 'time')
