@@ -19,6 +19,7 @@ class TripSerializer(serializers.ModelSerializer):
             ]
         read_only_fields=['id', 'latitude', 'longitude']
 
+
     def validate(self, data):
         if data['start_date'] > data['end_date']:
             raise serializers.ValidationError("End date must be after start date.")
@@ -36,11 +37,15 @@ class TripUserSerializer(serializers.ModelSerializer):
         ]
 
 class PlaceSerializer(serializers.ModelSerializer):
+    category = serializers.SerializerMethodField()
     class Meta:
         model = Place
         fields = '__all__'
         read_only_fields=['id', 'latitude', 'longitude']
         extra_kwargs = {'trip': {'write_only': True}}
+    
+    def get_category(self,obj):
+        return obj.get_category_display()
 
 class TripPlaceSerializer(TripSerializer):
     places = serializers.SerializerMethodField()
@@ -52,6 +57,7 @@ class TripPlaceSerializer(TripSerializer):
     def get_places(self, instance):
         places = instance.places.all().order_by('date', 'time')
         return PlaceSerializer(places, many=True).data
+    
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

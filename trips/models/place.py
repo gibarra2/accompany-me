@@ -8,9 +8,9 @@ from trips.geocoding import address_geocoding
 # Create your models here.
 class Place(models.Model):
     CATEGORIES = (
-        ("DINE", "DINING"), 
-        ("SHOP", "SHOPPING"), 
-        ("ATTR", "ATTRACTION")
+        ("DINE", "Dining"), 
+        ("SHOP", "Shopping"), 
+        ("ATTR", "Attraction")
         )
 
     name = models.CharField(max_length=255)
