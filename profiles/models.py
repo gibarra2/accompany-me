@@ -3,10 +3,17 @@ from django.conf import settings
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from .managers import CustomUserManager
 
 # Create your models here.
 class User(AbstractUser):
     email = models.EmailField(unique=True)
+    username = None
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
 
 
 class Profile(models.Model):
