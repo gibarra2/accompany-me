@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Trip, Place
-from profiles.models import DummyUser
+from profiles.models import DummyUser, User
+from django.contrib.auth.password_validation import validate_password
 from datetime import date
 
 class TripSerializer(serializers.ModelSerializer):
@@ -60,21 +61,27 @@ class TripPlaceSerializer(TripSerializer):
     
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
     class Meta:
-        model = DummyUser
+        model = User
         fields = [
             'id', 
             'first_name', 
             'last_name', 
             'email',
-            'is_logged_in'
+            'password'
         ]
 
-    def update(self, instance, validated_data):
-        login_status = validated_data.get('is_logged_in', instance.is_logged_in)
-        instance.is_logged_in = login_status
-        instance.save()
-        return instance
+    def validate_password(self, value):
+        validate_password(value)
+        return value
+
+    def create(self, validated_data):
+        user = super(UserSerializer, self).create(validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
 
 
 class UserTripSerializer(serializers.ModelSerializer):

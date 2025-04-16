@@ -1,5 +1,5 @@
 from rest_framework import generics, status
-from profiles.models import DummyUser
+from profiles.models import DummyUser, User
 from trips.serializers import UserTripSerializer, UserSerializer, TripSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
@@ -11,7 +11,7 @@ class UserList(generics.ListCreateAPIView):
     Get a list of all users. 
     Create a new user. 
     '''
-    queryset = DummyUser.objects.all()
+    queryset = User.objects.all()
     serializer_class = UserSerializer
 
 class UserDetail(APIView):
